@@ -25,186 +25,135 @@ typedef set<int> seti;
 #define s second
 #define MOD 1000000007
 
-struct rook{
-    int num, x, y, dist;
+int X[667], Y[667];
 
-    rook(){
-
+bool isRookPresent(int x, int y){
+    for(int i = 1; i <= 666; i++){
+        if(X[i] == x && Y[i] == y) return true;
     }
-
-    rook(int num, int x, int y, int d){
-        this->num = num;
-        this->x = x;
-        this->y = y;
-        this->dist = d;
-    }
-
-
-};
-
-struct compare{
-    bool operator() (rook const& a, rook const& b){
-        return a.dist > b.dist;
-    }
-};
+    return false;
+}
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n = 1000;
-    int numRooks = 666;
+    int u, v;
+    cin >> u >> v;
 
-    // cout << "YUP3" << endl;
-
-    char board[n+1][n+1];
-    for(int i = 1; i <= n; i++){
-        for(int j = 1; j <= n; j++){
-            // cout << i << " " << j << endl;
-            board[i][j] = '.';
-        }
+    for(int i = 1; i <= 666; i++){
+        cin >> X[i] >> Y[i];
     }
 
-    // cout << "YUP4" << endl;
-
-    int x, y, u, v;
-    cin >> x >> y;
-    board[x][y] = 'k';
-    u = x;
-    v = y;
-
-    // cout << "YUP2" << endl;
-
-    rook a, b;
-    priority_queue<rook, vector<rook>, compare> pq;
-
-    for(int i = 1; i <= numRooks; i++){
-        cin >> x >> y;
-        board[x][y] = 'r';
-        int dist = min(abs(u-x), abs(v-y));
-        a = rook(i, x, y, dist);
-        pq.push(a);
-    }
-
-    // cout << "YUP" << endl;
-
-    bool isMoved;
-    int aa, bb, cc;
-    while(1){
-        // cout << "YES" << endl;
-        isMoved = false;
-        board[u][v] = '.';
-
-        a = pq.top();
-        pq.pop();
-        b = pq.top();
-
-        if(abs(u-a.x) <= abs(v-a.y)){
-            if(u > a.x){
-                if(b.y < v && a.y < v && board[u-1][v-1] != 'r'){
-                    cout << u-1 << " " << v-1 << endl;
-                    u--; v--;
-                    isMoved = true;
-                }
-                else if(b.y > v && a.y > v && board[u-1][v+1] != 'r'){
-                    cout << u-1 << " " << v+1 << endl;
-                    u--; v++;
-                    isMoved = true;
-                }
-
-                if(!isMoved){
-                    cout << u-1 << " " << v << endl;
-                    u--;
-                    isMoved = true;
-                }
-            }
-            else{
-                if(b.y < v && a.y < v && board[u+1][v-1] != 'r'){
-                    cout << u+1 << " " << v-1 << endl;
-                    u++; v--;
-                    isMoved = true;
-                }
-                else if(b.y > v && a.y > v && board[u+1][v+1] != 'r'){
-                    cout << u+1 << " " << v+1 << endl;
-                    u++; v++;
-                    isMoved = true;
-                }
-
-                if(!isMoved){
-                    cout << u+1 << " " << v << endl;
-                    u++;
-                    isMoved = true;
-                }
-            }
+    int k, x, y;
+    while(u != 500 || v != 500){
+        if(u < 500){
+            cout << u+1 << " " << v << endl;
+            u++;
         }
+        else if(u > 500){
+            cout << u-1 << " " << v << endl;
+            u--;
+        }
+        else if(v < 500){
+            cout << u << " " << v+1 << endl;
+            v++;
+        }
+        else if(v > 500){
+            cout << u << " " << v-1 << endl;
+            v--;
+        }
+
+        cin >> k >> x >> y;
+        if(k == -1) return 0;
         else{
-            if(v > a.y){
-                if(b.x < u && a.x < u && board[u-1][v-1] != 'r'){
-                    cout << u-1 << " " << v-1 << endl;
-                    u--; v--;
-                    isMoved = true;
-                }
-                else if(b.x > u && a.x > u && board[u+1][v-1] != 'r'){
-                    cout << u+1 << " " << v-1 << endl;
-                    u++; v--;
-                    isMoved = true;
-                }
+            X[k] = x;
+            Y[k] = y;
+        }
+    }
 
-                if(!isMoved){
-                    cout << u << " " << v-1 << endl;
-                    v--;
-                    isMoved = true;
-                }
+    int upLeft = 0, upRight = 0, downLeft = 0, downRight = 0;
+    for(int i = 1; i <= 666; i++){
+        if(X[i] < 500 || Y[i] < 500) upLeft++;
+        if(X[i] > 500 || Y[i] < 500) downLeft++;
+        if(X[i] < 500 || Y[i] > 500) upRight++;
+        if(X[i] > 500 || Y[i] > 500) downRight++;
+    }
+
+    int direction = max({upLeft, downLeft, upRight, downRight});
+    if(direction == upLeft){
+        while(1){
+            if(isRookPresent(u-1, v-1)){
+                cout << u-1 << " " << v << endl;
+                u--;
             }
             else{
-                if(b.x < u && a.x < u && board[u-1][v+1] != 'r'){
-                    cout << u-1 << " " << v+1 << endl;
-                    u--; v++;
-                    isMoved = true;
-                }
-                else if(b.x > u && a.x > u && board[u+1][v+1] != 'r'){
-                    cout << u+1 << " " << v+1 << endl;
-                    u++; v++;
-                    isMoved = true;
-                }
+                cout << u-1 << " " << v-1 << endl;
+                u--; v--;
+            }
 
-                if(!isMoved){
-                    cout << u << " " << v+1 << endl;
-                    v++;
-                    isMoved = true;
-                }
+            cin >> k >> x >> y;
+            if(k == -1) return 0;
+            else{
+                X[k] = x;
+                Y[k] = y;
             }
         }
+    }
+    else if(direction == downLeft){
+        while(1){
+            if(isRookPresent(u+1, v-1)){
+                cout << u+1 << " " << v << endl;
+                u++;
+            }
+            else{
+                cout << u+1 << " " << v-1 << endl;
+                u++; v--;
+            }
 
-        // if(!isMoved){
-        //     cout << "Not moved" << endl;
-        //     break;
-        // }
-
-        pq.push(a);
-        board[u][v] = 'k';
-
-        cin >> aa >> bb >> cc;
-
-        if(aa == -1 && bb == -1 && cc == -1) break;
-
-        stack<rook> st;
-        while(pq.top().num != aa){
-            st.push(pq.top());
-            pq.pop();
+            cin >> k >> x >> y;
+            if(k == -1) return 0;
+            else{
+                X[k] = x;
+                Y[k] = y;
+            }
         }
+    }
+    else if(direction == upRight){
+        while(1){
+            if(isRookPresent(u-1, v+1)){
+                cout << u-1 << " " << v << endl;
+                u--;
+            }
+            else{
+                cout << u-1 << " " << v+1 << endl;
+                u--; v++;
+            }
 
-        a = pq.top();
-        pq.pop();
-        while(st.size() != 0){
-            pq.push(st.top());
-            st.pop();
+            cin >> k >> x >> y;
+            if(k == -1) return 0;
+            else{
+                X[k] = x;
+                Y[k] = y;
+            }
         }
+    }
+    else if(direction == downRight){
+        while(1){
+            if(isRookPresent(u+1, v+1)){
+                cout << u+1 << " " << v << endl;
+                u++;
+            }
+            else{
+                cout << u+1 << " " << v+1 << endl;
+                u++; v++;
+            }
 
-        board[a.x][a.y] = '.';
-        a.x = bb;
-        a.y = cc;
-        board[a.x][a.y] = 'r';
-        a.dist = min(abs(u-a.x), abs(v-a.y));
-        pq.push(a);
+            cin >> k >> x >> y;
+            if(k == -1) return 0;
+            else{
+                X[k] = x;
+                Y[k] = y;
+            }
+        }
     }
 }
