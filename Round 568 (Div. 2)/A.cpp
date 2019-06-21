@@ -24,35 +24,20 @@ typedef set<int> seti;
 #define allp(x) (x)->begin(), (x)->end()
 #define f first
 #define s second
-#define MOD 998244353
+#define MOD 1000000007
 #define PI acos(-1)
-
-bool compare(ll a, ll b){
-    return a > b;
-}
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    ll n;
-    cin >> n;
+    ll input[3];
+    ll d;
+    cin >> input[0] >> input[1] >> input[2] >> d;
 
-    ll *A = new ll[n];
-    for(ll i = 0; i < n; i++) cin >> A[i];
+    sort(input, input+3);
 
-    ll *B = new ll[n];
-    for(ll i = 0; i < n; i++) cin >> B[i];
-
-    ll helper[n];
-    for(ll i = 0; i < n; i++){
-        helper[i] = (i+1)*(n-i)*A[i];
-    }
-    sort(helper, helper+n);
-
-    sort(B, B+n);
     ll total = 0;
-    for(ll i = 0; i < n; i++){
-        total = (total+(((helper[i]%MOD)*B[n-1-i])%MOD))%MOD;
-    }
+    if(input[1]-input[0] < d) total += d-(input[1]-input[0]);
+    if(input[2]-input[1] < d) total += d-(input[2]-input[1]);
     cout << total << endl;
 }

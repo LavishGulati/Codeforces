@@ -24,35 +24,42 @@ typedef set<int> seti;
 #define allp(x) (x)->begin(), (x)->end()
 #define f first
 #define s second
-#define MOD 998244353
+#define MOD 1000000007
 #define PI acos(-1)
-
-bool compare(ll a, ll b){
-    return a > b;
-}
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    ll n;
-    cin >> n;
-
-    ll *A = new ll[n];
-    for(ll i = 0; i < n; i++) cin >> A[i];
-
-    ll *B = new ll[n];
-    for(ll i = 0; i < n; i++) cin >> B[i];
-
-    ll helper[n];
-    for(ll i = 0; i < n; i++){
-        helper[i] = (i+1)*(n-i)*A[i];
+    int t;
+    cin >> t;
+    string a, b;
+    bool IsPossible;
+    while(t--){
+        IsPossible = true;
+        cin >> a >> b;
+        int n = a.length();
+        int m = b.length();
+        int i = 0, j = 0;
+        char c;
+        int num1, num2;
+        while(i < a.length()){
+            c = a[i];
+            num1 = num2 = 0;
+            while(i < n && a[i] == c){
+                num1++;
+                i++;
+            }
+            while(j < m && b[j] == c){
+                j++;
+                num2++;
+            }
+            if(num2 < num1){
+                IsPossible = false;
+                break;
+            }
+        }
+        if(j < m) cout << "NO" << endl;
+        else if(IsPossible) cout << "YES" << endl;
+        else cout << "NO" << endl;
     }
-    sort(helper, helper+n);
-
-    sort(B, B+n);
-    ll total = 0;
-    for(ll i = 0; i < n; i++){
-        total = (total+(((helper[i]%MOD)*B[n-1-i])%MOD))%MOD;
-    }
-    cout << total << endl;
 }

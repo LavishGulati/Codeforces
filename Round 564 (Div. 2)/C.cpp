@@ -24,35 +24,45 @@ typedef set<int> seti;
 #define allp(x) (x)->begin(), (x)->end()
 #define f first
 #define s second
-#define MOD 998244353
+#define MOD 1000000007
 #define PI acos(-1)
-
-bool compare(ll a, ll b){
-    return a > b;
-}
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    ll n;
+    int n;
     cin >> n;
 
-    ll *A = new ll[n];
-    for(ll i = 0; i < n; i++) cin >> A[i];
+    int *hand = new int[n+1];
+    for(int i = 1; i <= n; i++) cin >> hand[i];
+    sort(hand, hand+n);
 
-    ll *B = new ll[n];
-    for(ll i = 0; i < n; i++) cin >> B[i];
+    int *pile = new int[n+1];
+    for(int i = 1; i <= n; i++) cin >> pile[i];
 
-    ll helper[n];
-    for(ll i = 0; i < n; i++){
-        helper[i] = (i+1)*(n-i)*A[i];
+    int *id = new int[n+1];
+    for(int i = 1; i <= n; i++) id[i] = 0;
+    for(int i = 1; i <= n; i++){
+        if(pile[i] != 0){
+            id[pile[i]] = i;
+        }
     }
-    sort(helper, helper+n);
 
-    sort(B, B+n);
-    ll total = 0;
-    for(ll i = 0; i < n; i++){
-        total = (total+(((helper[i]%MOD)*B[n-1-i])%MOD))%MOD;
+    if(id[1]){
+        int i, j;
+        for(i = 2; id[i] == id[1]+i-1; i++);
+        if(id[i-1] == n){
+            for(j = i; j <= n && id[j] <= j-i; j++);
+            if(j > n){
+                cout << n-i+1 << endl;
+                return 0;
+            }
+        }
     }
-    cout << total << endl;
+
+    int answer = 0;
+    for(int i = 1; i <= n; i++){
+        answer = max(answer, id[i]-i+1);
+    }
+    cout << answer+n << endl;
 }
