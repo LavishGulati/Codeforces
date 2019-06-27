@@ -65,7 +65,11 @@ int main(){
         for(int i = 0; i < num; i++){
             ans = true;
 
-            if(helper[i].size() <= 1) continue;
+            if(helper[i].size() == 0) continue;
+
+            a = helper[i][0].f;
+            b = helper[i][0].s;
+            if(helper[i].size() == 1) continue;
 
             if(helper[i][0].f == helper[i][1].f){
                 x = helper[i][0].f;
@@ -76,12 +80,8 @@ int main(){
                 c = 'C';
             }
             else{
-                cout << "NO" << endl;
                 ans = false;
             }
-
-            a = helper[i][0].f;
-            b = helper[i][0].s;
 
             if(!ans) break;
 
@@ -106,6 +106,40 @@ int main(){
         for(int i = 0; i < num; i++){
             sort(all(helper[i]));
         }
+
+        int l;
+        ans = true;
+        for(int i = num-1; i >= 0; i--){
+            l = helper[i].size();
+            if(l <= 1) continue;
+            if(helper[i][0].f == helper[i][l-1].f){
+                for(int j = helper[i][0].s; j <= helper[i][l-1].s; j++){
+                    if(grid[helper[i][0].f][j]-'a' < i){
+                        // cout << i << " " << helper[i][0].f << " " << j << endl;
+                        ans = false;
+                        break;
+                    }
+                }
+                if(!ans) break;
+            }
+            else{
+                for(int j = helper[i][0].f; j <= helper[i][l-1].f; j++){
+                    if(grid[j][helper[i][0].s]-'a' < i){
+                        // cout << i << " " << helper[i][0].f << " " << j << endl;
+                        ans = false;
+                        break;
+                    }
+                }
+                if(!ans) break;
+            }
+        }
+
+        if(!ans){
+            cout << "NO" << endl;
+            continue;
+        }
+
+
         cout << "YES" << endl;
         cout << num << endl;
         int k;
